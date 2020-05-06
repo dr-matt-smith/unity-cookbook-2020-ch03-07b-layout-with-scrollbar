@@ -1,46 +1,31 @@
 ﻿using UnityEngine;
 
-public class PlayerInventory : MonoBehaviour
+public class PlayerInventory : MonoBehaviour 
 {
-	// a cached reference to an instance of class PlayerInventoryDisplay
+	private int starTotal = 0;
 	private PlayerInventoryDisplay playerInventoryDisplay;
 
-	// counter to record total numebr of stars being carryied
-	private int totalStars = 0;
-
-	//------------------------
-	// cache a reference to the PlayerInventoryDisplay object
-	// that is in the parent GameObject
 	void Awake()
 	{
 		playerInventoryDisplay = GetComponent<PlayerInventoryDisplay>();
 	}
 
-	//------------------------
-	// Ensure UI display matches this initial state
-	// of whether we are carrying a star or not
 	void Start()
 	{
-		playerInventoryDisplay.OnChangeStarTotal(totalStars);
+		playerInventoryDisplay.OnChangeStarTotal(starTotal);
 	}
-
-	//--------------------------
-	// when we hit a star, update carrying flag
-	// and update the display
-	// (and remove the star GameObject)
+	
 	void OnTriggerEnter2D(Collider2D hit)
 	{
-		// IF we hit something tagged 'Star'
-		if (hit.CompareTag("Star"))
-		{
-			// increment the total by 1
-			totalStars++;
-
-			// update the UI display of our star carrying status
-			playerInventoryDisplay.OnChangeStarTotal(totalStars);
-
-			// destroy the star object that we collided with
+		if(hit.CompareTag("Star")){
+			AddStar();
 			Destroy(hit.gameObject);
 		}
+	}
+
+	private void AddStar()
+	{
+		starTotal++;
+		playerInventoryDisplay.OnChangeStarTotal(starTotal);
 	}
 }
